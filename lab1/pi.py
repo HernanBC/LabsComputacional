@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import numpy as np
-
 # Esta es una función para integrar con método de Suma de Riemann,
 # para usarla se requiere definir la función del integrando.
 
