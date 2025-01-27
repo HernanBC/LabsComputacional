@@ -6,8 +6,7 @@
 # Función integrando
 # x corresponde a la variable independiente de la función
 def integrando(x):
-    f = 4 /(1+x**2)
-    return f
+    return 4 /(1+x**2)
 
 # Función Suma de Riemann
 # Integrando -> Función a integrar
