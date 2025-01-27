@@ -61,7 +61,9 @@ int main(int argc, char* argv[]){
         // Su código aquí
 
         C[(i*m) + j] +=  A[(i * n) + k] *B[(k * m) + j] ;
-
+        // Se usa un indice mudo k para relacionar las entradas de las matrices linearizadas para realizar la multiplicación
+        // El resultado de cada multiplicación de entradas individuales se suma y acumula en la entrada linearizada de la 
+        // matriz C. Esto se hace para cada entrada de la matriz resultante.
       }
     }
   }
