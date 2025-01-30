@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-// Porqué pongo la firma de esta función al inicio? Si no se coloca, genera un error porque el main no encuentra la definición de print_mat
+// Porqué pongo la firma de esta función al inicio? Si no se coloca, genera un error porque el compilador no encuentra la definición de print_mat
 void print_mat(std::vector<double> &mat, int &rows, int &cols);
 
 int main(int argc, char* argv[]){
