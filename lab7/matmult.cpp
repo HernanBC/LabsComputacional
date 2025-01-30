@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-// Porqué pongo la firma de esta función al inicio?
+// Porqué pongo la firma de esta función al inicio? Si no se coloca, genera un error porque el main no encuentra la definición de print_mat
 void print_mat(std::vector<double> &mat, int &rows, int &cols);
 
 int main(int argc, char* argv[]){
@@ -73,7 +73,8 @@ int main(int argc, char* argv[]){
   return 0;
 }
 
-// Porqué la firma de esta función usa & para sus argumentos?
+// Porqué la firma de esta función usa & para sus argumentos? Se esta pasando los parametros por referencia, de modo que se evite crear copias innecesarias al
+                                                            // introducir los parametros dentro de la función.
 void print_mat(std::vector<double> &mat, int &rows, int &cols){
   for(int i = 0; i < rows; ++i){
     for(int j = 0; j < cols; ++j){
