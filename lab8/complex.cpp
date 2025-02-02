@@ -1,5 +1,6 @@
 #include <iostream>
-#include "complex.hpp" // Incluye el archivo header para la implementación de sus métodos aquí
+#include <cmath> // Incluimos la biblioteca que contiene la funcion sqrt()
+#include "complex.hpp" // Incluye el archivo header para la implementación de sus métodos aquí, solo se incluye en este archivo porque el .hpp solo contiene declaraciones
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTORES
@@ -45,9 +46,37 @@ void Complex::print() const { 		// Implementación del método para imprimir un 
 }
 
 double Complex::norma() const { 		// Implementación del método que devuelve la norma de un número complejo
-	return real*real + imaginario*imaginario;
+	return std::sqrt(real*real + imaginario*imaginario);
 }
 
 Complex Complex::conjugado()const{  	//Implementación de un método que devuelve un objeto de Complex que corresponde al conjugado complejo
 	return Complex(real,-imaginario); 	//del vector al que se le aplicó el método.
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SOBRECARGA DE OPERADORES ARITMETICOS
+
+// SUMA +
+Complex Complex::operator+(const Complex &other) const {
+	return Complex(real + other.real, imaginario + other.imaginario);
+}
+
+// RESTA -
+Complex Complex::operator-(const Complex &other) const {
+	return Complex(real - other.real, imaginario - other.imaginario);
+}
+
+// MULTIPLICACION *
+Complex Complex::operator*(const Complex &other) const {
+	return Complex(real*other.real - imaginario*other.imaginario,real*other.imaginario + other.real*imaginario );
+}
+
+// DIVISION /
+Complex Complex::operator/(const Complex &other) const {
+	double denominador = other.norma()*other.norma();
+	if (denominador ==0) throw std::runtime_error("La división por cero no existe");
+
+	Complex num = (*this)*other.conjugado();
+	return Complex(num.real/denominador , num.imaginario/denominador);
 }

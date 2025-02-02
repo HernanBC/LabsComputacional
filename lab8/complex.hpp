@@ -17,15 +17,22 @@ class Complex { 			// Defino una clase con el nombre de Complex
 		// Operador asignación
 		Complex &operator=(const Complex &other);
 
+		// Sobrecarga +
+		Complex operator+(const Complex &other) const;
+
+		// Sobrecarga -
+		Complex operator-(const Complex &other) const;
+
+		// Sobrecarga *
+		Complex operator*(const Complex &other) const;
+
+		// Sobrecarga /
+		Complex operator/(const Complex &other) const;
+
 		//Métodos
 		void print() const; // Declaración de un método de la clase para observar el número complejo, el parametro "const" hace que no modifique atributos de la clase
 		double norma() const; //Declaración de un método para obtener el valor de la norma de un número complejo
 		Complex conjugado() const; // Declaración de un método para obtener el conjugado complejo de un número complejo
-
-
-
-
-
 
 }; // Las clases sí requieren de cerrar la llave con un ;
 
