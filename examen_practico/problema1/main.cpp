@@ -7,8 +7,8 @@ int main(){
 	c1.print(); // Uso el método print de la clase para mostrar la tupla
 
 	Tuple c2; // Segundo objeto de Tuple, probando el constructor por defecto. No se usa parentesis para dejar claro que estoy llamando al constructor y que
-	std::cout<<"\n"<<"c2 ="<<std::endl;
-	c2.print(); // C++ comprenda que estoy haciendo eso y no haciendo un llamado a una función c2(). Otra forma de escribirlo puede ser: Tuple c2 = Tuple()
+	std::cout<<"\n"<<"c2 ="<<std::endl; // C++ comprenda que estoy haciendo eso y no haciendo un llamado a una función c2(). Otra forma de escribirlo puede ser: Tuple c2 = Tuple()
+	c2.print(); 
 
 	Tuple c3(4);
 	std::cout<<"\n"<<"c3 ="<<std::endl;
@@ -28,7 +28,7 @@ int main(){
 	// Probando contructor copia
 	std::cout<<"\n"<<"Constructor copia"<<std::endl;
 	Tuple cc(c3);
-	std::cout<<"\n"<<"c_asignacion ="<<std::endl;
+	std::cout<<"\n"<<"c_copia ="<<std::endl;
 	cc.print();
 
 	/////////////////////////////////////
@@ -75,9 +75,9 @@ int main(){
 	std::cout<<"\n"<<"Operaciones Aritméticas"<<"\n"<<std::endl;
 
 	std::cout<<"Sumando c3 y c4"<<std::endl;
-	Tuple c5;
+	Tuple c5; // Genero con constructor por defecto
 	try{
-		c5 = c3 + c4;
+		c5 = c3 + c4; // Asigno y relleno con suma
 		std::cout<<"c5 ="<<std::endl;
 		c5.print();
 	}
@@ -87,9 +87,9 @@ int main(){
 	
 
 	std::cout<<"\n"<<"Restando c3 y c4"<<std::endl;
-	Tuple c6;
+	Tuple c6; // Genero con constructor por defecto
 	try{
-		c6 = c3 - c4;
+		c6 = c3 - c4; // Asigno y relleno con resta
 	}
 	catch (const std::exception &e){
 		std::cout << "ERROR: "<<e.what()<<std::endl;
@@ -99,9 +99,9 @@ int main(){
 
 	std::cout<<"\n"<<"Multiplicando c3 y c4"<<std::endl;
 	std::cout<<"c7 ="<<std::endl;
-	Tuple c7;
+	Tuple c7; // Genero con constructor por defecto
 	try{
-		c7 = c3 * c4;
+		c7 = c3 * c4; // Asigno y relleno con multiplicación
 	}
 	catch (const std::exception &e){
 		std::cout << "ERROR: "<<e.what()<<std::endl;
@@ -109,9 +109,9 @@ int main(){
 	c7.print();
 
 	std::cout<<"\n"<<"Dividiendo c4 y c3"<<std::endl;
-	Tuple c8;
+	Tuple c8; // Genero con constructor por defecto
 	try{
-		c8 = c4 / c3;
+		c8 = c4 / c3; // Asigno y relleno con división
 	}
 	catch (const std::exception &e){
 		std::cout << "ERROR: "<<e.what()<<std::endl;
@@ -123,9 +123,9 @@ int main(){
 	std::cout<<"\n"<<"Cambiamos el primer elemento de c3, de cero a uno"<<std::endl;
 	c3[0] = 1.0;
 	std::cout<<"Tratamos de hacer la división nuevamente"<<std::endl;
-	Tuple c9;
+	Tuple c9; // Genero con constructor por defecto
 	try{
-		c9 = c4 / c3;
+		c9 = c4 / c3; // Asigno y relleno con división
 	}
 	catch (const std::exception &e){
 		std::cout << "ERROR: "<<e.what()<<std::endl;
