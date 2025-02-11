@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstring> 	// Incluyo biblioteca para usar memcpy
+#include <algorithm> 	// Incluyo biblioteca para usar copy
 #include "tuple.hpp" // Incluye el archivo header para la implementación de sus métodos aquí, solo se incluye en este archivo porque el .hpp solo contiene declaraciones
 
 
@@ -20,7 +20,7 @@ Tuple::Tuple(size_t size) : size(size) { // Inicialización del constructor pers
 
 Tuple::Tuple(const Tuple &other) : size(other.size) { 	// Inicialización del constructor copia
 	data = new double[size];							// Asigna a memoria dinámica para un nuevo objeto data
-	std::memcpy(data, other.data, size*sizeof(double));	// La copia superficial se realiza mediante std::memcpy que es una función que copia un bloque de memoria de un lugar a otro
+	std::copy(other.data, other.data+ size, data);	// Copia un rango de elementos de una secuencia a otra
 }														// La combinación de las líneas anteriores da como resultado una deep copy del objeto original
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,15 +32,15 @@ Tuple::~Tuple(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // OPERADOR ASIGNACION
+// Se sobrecarga el operador para reasignar la forma y contenidos de un tuple en otro
 Tuple &Tuple::operator=(const Tuple &other){  // Sobrecarga del operador asignación
 	if (this != &other){ 			  // Es necesario verificar que no estamos asignando un objeto así mismo
-		delete[] data;
-		size = other.size;
-		data = new double[size];
-		std::memcpy(data, other.data, size*sizeof(double));
-		}
-		return *this;
-		}
+		Tuple temp(other);
+		std::swap(size, temp.size); // Intercambio de atributos
+		std::swap(data, temp.data); // Intercambio de atributos
+	}
+	return *this;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SOBRECARGA DE OPERADORES ARITMETICOS
@@ -49,83 +49,63 @@ Tuple &Tuple::operator=(const Tuple &other){  // Sobrecarga del operador asignac
 // sobrecargas
 
 // SUMA +
+// Se sobrecarga al operador para sumar elemento a elemento entre dos tuples
 Tuple Tuple::operator+(const Tuple &other) const {
-	try {
-		if (size != other.size){				// Verificación de tamaños
-			throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
-		}
-		Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
-		for (size_t i =0; i < size; ++i){
-			result.data[i] = data[i] + other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la suma
-		}											  // de elementos individuales de los objetos originales
-		return result;	// Se retorna el resultado de la suma de elementos 1 a 1
+	if (size != other.size){				// Verificación de tamaños
+		throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
 	}
-	catch (const std::invalid_argument &e){
-		std::cout<<"ERROR: "<< e.what()<<std::endl;
-		return Tuple();								// Devuelve un objeto Tuple con el constructor por defecto
-	}
+	Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
+	for (size_t i =0; i < size; ++i){
+		result.data[i] = data[i] + other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la suma
+	}											  // de elementos individuales de los objetos originales
+	return result;	// Se retorna el resultado de la suma de elementos 1 a 1
 }
 
 // RESTA -
+// Se sobrecarga al operador para restar elemento a elemento entre dos tuples
 Tuple Tuple::operator-(const Tuple &other) const {
-	try {
-		if (size != other.size){				// Verificación de tamaños
-			throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
-		}
-		Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
-		for (size_t i =0; i < size; ++i){
-			result.data[i] = data[i] - other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la resta
-		}											  // de elementos individuales de los objetos originales
-		return result;	// Se retorna el resultado de la resta de elementos 1 a 1
+	if (size != other.size){				// Verificación de tamaños
+		throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
 	}
-	catch (const std::invalid_argument &e){
-		std::cout<<"ERROR: "<< e.what()<<std::endl;
-		return Tuple();								// Devuelve un objeto Tuple con el constructor por defecto
-	}
+	Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
+	for (size_t i =0; i < size; ++i){
+		result.data[i] = data[i] - other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la resta
+	}											  // de elementos individuales de los objetos originales
+	return result;	// Se retorna el resultado de la resta de elementos 1 a 1
 }
 
 // MULTIPLICACION *
+// Se sobrecarga al operador para multiplicar elemento a elemento entre dos tuples
 Tuple Tuple::operator*(const Tuple &other) const {
-	try {
-		if (size != other.size){				// Verificación de tamaños
-			throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
-		}
-		Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
-		for (size_t i =0; i < size; ++i){
-			result.data[i] = data[i] * other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la multiplicación
-		}											  // de elementos individuales de los objetos originales
-		return result;	// Se retorna el resultado de la multiplicación de elementos 1 a 1
+	if (size != other.size){				// Verificación de tamaños
+		throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
 	}
-	catch (const std::invalid_argument &e){
-		std::cout<<"ERROR: "<< e.what()<<std::endl;
-		return Tuple();								// Devuelve un objeto Tuple con el constructor por defecto
-	}
+	Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
+	for (size_t i =0; i < size; ++i){
+		result.data[i] = data[i] * other.data[i]; // Mediante el ciclo se van reasignando las entradas de result, una a una, a partir de la multiplicación
+	}											  // de elementos individuales de los objetos originales
+	return result;	// Se retorna el resultado de la multiplicación de elementos 1 a 1
 }
 
 // Luego de los anteriores, la división es un caso espacial, dado que no se puede dividir entre cero, por lo que hay que condicionar la posibilidad de que
 // alguno de los elementos del array divisor sea un cero
 
 // DIVISION /
+// Se sobrecarga al operador para dividir elemento a elemento entre dos tuples
 Tuple Tuple::operator/(const Tuple &other) const {
-	try{
-		if (size != other.size){				// Verificación de tamaños
-			throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
-		}
-		for (size_t i=0; i<size; ++i){ // Antes de crear cualquier objeto con los resultados, se verifica si el divisor es apto
-			if (other.data[i] == 0.0){
-				throw std::invalid_argument("El arreglo divisor contiene al menos un cero");
-			}
-		}
-		Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
-		for (size_t i=0; i<size; ++i){
-			result.data[i] = data[i] / other.data[i];
-		}
-		return result;
+	if (size != other.size){				// Verificación de tamaños
+		throw std::invalid_argument("Los arreglos a operar no poseen el mismo tamaño"); // Mensaje de error
 	}
-	catch (const std::invalid_argument &e){
-		std::cout<<"ERROR: "<< e.what()<<std::endl;
-		return Tuple();								// Devuelve un objeto Tuple con el constructor por defecto
+	for (size_t i=0; i<size; ++i){ // Antes de crear cualquier objeto con los resultados, se verifica si el divisor es apto
+		if (other.data[i] == 0.0){
+			throw std::invalid_argument("El arreglo divisor contiene al menos un cero");
+		}
 	}
+	Tuple result(size); // Se genera un nuevo objeto con el constructor personalizado y que contiene un size de ceros
+	for (size_t i=0; i<size; ++i){
+		result.data[i] = data[i] / other.data[i];
+	}
+	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,30 +124,19 @@ size_t Tuple::get_size() const { 		// Implementación del método que devuelve l
 	return size;						// Se retorna el tamaño del array
 }
 
+// Sobrecarga extra, es necesario asignar valores a los elementos de la tuple para ejemplificar correctamente los métodos
+
 double &Tuple::operator[](size_t i) { // Implementación del método que contiene de forma NO CONST el elemento de un array según su índice
-	try {
-		if (i >= size) {				  // No exiten elemetos con índices mayores al rango
-			throw std::out_of_range("Índice fuera del rango");
-		}
-		return data[i];
+	if (i >= size) {				  // No exiten elemetos con índices mayores al rango
+		throw std::out_of_range("Índice fuera del rango");
 	}
-	catch (const std::out_of_range &e) {
-		std::cout<<"ERROR: "<< e.what() << std::endl;
-		static double invalid_value = 0.0;		// Se requiere declarar 0.0 como static para que obtenga una dirección de memoria
-		return invalid_value;
-	}
+	return data[i];
 }
 
 const double &Tuple::operator[](size_t i) const { // Implementación del método que contiene de forma NO CONST el elemento de un array según su índice
-	try{
-		if (i >= size) { 							  // No exiten elemetos con índices mayores al rango
-			throw std::out_of_range("Índice fuera del rango");
-		}
-		return data[i];
+
+	if (i >= size) { 							  // No exiten elemetos con índices mayores al rango
+		throw std::out_of_range("Índice fuera del rango");
 	}
-	catch (const std::out_of_range &e) {
-		std::cout<<"ERROR: "<< e.what() << std::endl;
-		static double invalid_value = 0.0;			// Se requiere declarar 0.0 como static para que obtenga una dirección de memoria
-		return invalid_value;
-	}
+	return data[i];
 }

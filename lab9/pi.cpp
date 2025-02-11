@@ -1,6 +1,9 @@
 #include <iostream>
-#include <sys/time.h>
 #include <omp.h>
+#include <sys/time.h>
+#include <vector>
+#include <cstdio>
+#include <cstdlib>
 
 double seconds()
 {
@@ -43,10 +46,55 @@ double SumaRiemann(double (*integrando)(double),double x_inf, double x_sup, int 
 	return I*h; // Devolviendo el acumulador multiplicado por h
 }
 
+// Se va a usar GNUPLOT para realizar la gráfica
+
+void plot_graph(const std::vector<int>& threads, const std::vector<double>& times) {
+	FILE* gnuplot = popen("gnuplot -persistent", "w");
+	if (gnuplot) {
+		fprintf(gnuplot, "set title 'Escalabilidad con OpenMP'\n");
+		fprintf(gnuplot, "set xlabel 'Número de hilos'\n");
+		fprintf(gnuplot, "set ylabel 'Speed-up'\n");
+		fprintf(gnuplot, "plot '-' with linespoints title 'Escalabilida vs Hilos'\n");
+		for (size_t i = 0; i < threads.size(); ++i) {
+			fprintf(gnuplot, "%d %f\n", threads[i], times[i]);
+		}
+		fprintf(gnuplot, "e\n"); // Finaliza la entrada de datos
+		fclose(gnuplot);
+	} else {
+		std::cerr << "Error al abrir gnuplot." << std::endl;
+	}
+}
+
 
 int main(){
-	std::cout.precision(8); // El output va a tener 8 decimales de presición
-	std::cout << SumaRiemann(integrando, 0.0,1.0,1000) << std::endl; 
+	// std::cout.precision(8); // El output va a tener 8 decimales de presición
+	// std::cout << SumaRiemann(integrando, 0.0,1.0,1000) << std::endl; 
 	// printeando el resultado de integrar una función llamada integrando de 0 a 1 y usando 1000 rectangulos
+
+	std::vector<int> threads_list = {1, 2, 3, 4}; // Número de hilos a probar
+    std::vector<double> times;                        // Almacenar los tiempos de ejecución
+
+    // Probar diferentes números de hilos
+    for (int num_threads : threads_list) {
+        omp_set_num_threads(num_threads); // Configura el número de hilos
+        double time_1 = seconds();
+        SumaRiemann(integrando, 0.0, 1.0, 1000000000);
+        double time_2 = seconds();
+        double total_time = time_2 - time_1;
+        times.push_back(total_time);
+        
+        std::cout << "Threads: " << num_threads << " Time: " << total_time << " seconds" << std::endl;
+    }
+
+	std::vector<double> speed_up = times;
+    for (size_t i = 0; i < times.size(); ++i) {
+    speed_up[i] = times[0]/speed_up[i];
+    }
+
+
+	// Grafica de escalabilidad
+    plot_graph(threads_list, speed_up);
 	return 0;
 }
+
+// Nota: Mi computadora solo tiene 2 cores, por lo que al solicitar números más gran de 2 para los threads a probar genera resultados extraños
