@@ -132,5 +132,14 @@ int main(){
 	}
 	std::cout<<"c9 ="<<std::endl;
 	c9.print();
+
+	// Ahora el desctructor
+	{
+		Tuple c10(5);
+		std::cout<<"Se crea un objeto c10"<<std::endl;
+		std::cout<<"\n" << "c10 ="<<std::endl;
+		c10.print();
+	}
+	std::cout<<"\n"<<"Aquí a fuera solo hay hasta c9"<<std::endl;
 	return 0;
 }
