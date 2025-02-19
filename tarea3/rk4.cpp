@@ -12,12 +12,12 @@ double func(double x, double y){
 // Implementación del Runge-Kutta 4
 // Esta función es la instrucción que se debe realizar en cada punto del intervalo a solucionar
 double rk4(double (*func)(double,double),double var_independiente, double var_dependiente, double paso){
-	double k1 = func(var_independiente,var_dependiente);
-	double k2 = func(var_independiente + 0.5*paso,var_dependiente + 0.5*k1);
-	double k3 = func(var_independiente + 0.5*paso,var_dependiente + 0.5*k2);
-	double k4 = func(var_independiente + paso,var_dependiente + k3);
+	double k1 = paso * func(var_independiente,var_dependiente);
+	double k2 = paso * func(var_independiente + 0.5*paso,var_dependiente + 0.5*k1);
+	double k3 = paso * func(var_independiente + 0.5*paso,var_dependiente + 0.5*k2);
+	double k4 = paso * func(var_independiente + paso,var_dependiente + k3);
 
-	return var_dependiente + paso*(k1 + 2*k2 + 2*k3 + k4)*(1.0/6.0);
+	return var_dependiente + (k1 + 2.0*k2 + 2.0*k3 + k4)*(1.0/6.0);
 }
 
 // EXTRA: No se solicita pero con esto obtengo los datos para graficar posteriormente
@@ -81,18 +81,19 @@ int main(){
 
 	// Numero de iteraciones a realizar
 	int ncasillas = std::floor((var_independ_final - var_independ_inicial)/paso);
+
 	std::vector<double> y(ncasillas+1); // Vector donde se guardaran los valores solución de la ecuación difencial
 	std::vector<double> x(ncasillas+1); // Vector donde se guardaran todos lo valores de la variable independiente
-	for (int i =0; i < ncasillas+1; ++i){
-		x[i] = var_independ_inicial +i*paso;
+
+    x[0] = var_independ_inicial; // Se le asigna la condición inicial al vector de x
+	y[0] = var_depend_inicial; // Se le asigna a la solución la condición inicial de la ecuación diferencia y(x=0) = y0
+
+	for (int i =0; i < ncasillas; ++i){
+		x[i+1] = x[i] +paso;
+        y[i+1] = rk4(func, x[i], y[i], paso);
 		//std::cout<<x[i]<<std::endl;
 	}
 
-	y[0] = var_depend_inicial; // Se le asigna a la solución la condición inicial de la ecuación diferencia y(x=0) = y0
-	for (int i =0; i < ncasillas; ++i){
-		y[i+1] = rk4(func, x[i], y[i], paso);
-		//std::cout<<y[i]<<std::endl;
-	}
 	std::vector<std::string> encabezados = {"x","y"} ;
 	escribirCSV("solution.csv",encabezados, {x, y});
 
