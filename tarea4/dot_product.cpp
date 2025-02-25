@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &size); // Número total de procesos
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);  // Identificador del proceso
     
-    const int N = 1000; // Tamaño de los vectores
+    const int N = 250; // Tamaño de los vectores
 
 	// Se declaron los 4 vectores a utilizar
     std::vector<double> a, b, local_a, local_b; 
